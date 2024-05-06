@@ -1,0 +1,17 @@
+.button {
+    cursor: url("src/assets/images/mini.png"), auto;
+    background-color: rgb(54, 175, 43);
+    color: rgba(213, 216, 220);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.button:hover {
+    background-color: rgb(78, 175, 43);
+    color: rgba(213, 216, 220);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}

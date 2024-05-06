@@ -1,0 +1,27 @@
+version: '3'
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./schema.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ejemplo
+      MYSQL_DATABASE: soccer_blog_db
+      MYSQL_USER: andre
+      MYSQL_PASSWORD: and
+    ports:
+      - "3301:3306"
+
+  app:
+    build: .
+    ports:
+      - "3001:3001"  # Ensure this matches your Node.js app's listening port
+    depends_on:
+      - db
+    environment:
+      DATABASE_HOST: db  # Nombre del servicio de base de datos en Docker Compose
+
+volumes:
+  db-data: {}
