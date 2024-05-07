@@ -23,7 +23,7 @@ Follow these steps to get your development environment running:
 
 ### Clone the repository
 Copy code
-git clone 
+git clone https://github.com/mar22266/Proyecto1WEB.git
 
 ### Install Node dependencies
 Navigate to the project directory and install the required npm packages:
@@ -47,4 +47,4 @@ To run the application with all its services (app and database) using Docker Com
 This command builds the Docker image for the application and starts the services defined in your docker-compose.yml file:
 
 ### MySQL Database: Runs on port 3301 and initializes with the provided schema.
-Node.js Application: Serves the soccer blog on port 3001.
+### Node.js Application: Serves the soccer blog on port 3001.
