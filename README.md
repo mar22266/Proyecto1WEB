@@ -2,6 +2,10 @@
 
 This repository contains the code for a soccer blog, a dynamic web application for soccer enthusiasts to share and consume content related to soccer. This project is designed with a React frontend and a Node.js backend, using MySQL for data persistence.
 
+### server
+
+https://andremarroquinta.netlify.app/
+http://ghostdomain.xyz/
 ## Getting Started
 
 These instructions will help you to set up your own copy of the soccer blog on your local machine for development and testing purposes.
