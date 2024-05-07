@@ -49,7 +49,7 @@ app.post('/posts', async (req, res) => {
     imageUrl,
   } = req.body
 
-  // Verificar si todos los campos requeridos están presentes
+  
   if (!title
     || !content
     || !homeTeam
@@ -134,7 +134,6 @@ app.put('/posts/:postId', async (req, res) => {
     )
 
     if (result.affectedRows === 0) {
-      // Si no se encontró el post para actualizar, devuelve un código 404
       return res.status(404).json({ message: 'Post not found' })
     }
 
@@ -185,8 +184,6 @@ app.post('/register', async (req, res) => {
   // eslint-disable-next-line no-console
   console.log('POST /register')
   const { username, password } = req.body
-
-  // Verificar si todos los campos requeridos están presentes
   if (!username || !password) {
     return res.status(400).json({ message: 'Missing required fields' })
   }
@@ -211,13 +208,6 @@ app.use((req, res) => {
 app.use((req, res) => {
   res.status(501).json({ message: 'Method not implemented' })
 })
-
-/*
-app.listen(port, address, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Server listening at http://127.0.0.1:${port}`)
-})
-*/
 
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server running on port ${port}`);

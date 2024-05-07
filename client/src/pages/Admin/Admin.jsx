@@ -40,7 +40,7 @@ const Admin = () => {
   const handleDelete = postId => {
     fetchData(`http://127.0.0.1:3001/posts/${postId}`, { method: 'DELETE' })
       .then(() => setPosts(posts.filter(post => post.id !== postId)))
-      .catch(err => console.error("Error deleting post:", err)) // Añadir manejo de errores
+      .catch(err => console.error("Error deleting post:", err)) 
   }
   
   const openModal = (post = null) => {
@@ -86,7 +86,7 @@ const Admin = () => {
         setPosts(posts.map(post => post.id === values.id ? updatedOrNewPost : post))
       }
       setIsModalOpen(false)
-    }).catch(err => console.error("Error saving post:", err)); // Añadir manejo de errores
+    }).catch(err => console.error("Error saving post:", err)); 
   }
 
   return (

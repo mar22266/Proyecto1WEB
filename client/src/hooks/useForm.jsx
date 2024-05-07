@@ -13,7 +13,7 @@ const useForm = (initialValues) => {
 
   const handleSubmit = (callback) => (event) => {
     if (event && typeof event.preventDefault === 'function') {
-      event.preventDefault() // Asegúrate de que event tiene preventDefault
+      event.preventDefault() 
     }
     callback(values)
   }

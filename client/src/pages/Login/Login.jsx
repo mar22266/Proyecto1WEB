@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import useNavigate from '@hooks/useNavigate'
-import useToken from '@hooks/useToken'
 import md5 from 'js-md5'
 
 import Input from '@components/Input'
@@ -11,7 +10,6 @@ import './Login.css'
 const Login = () => {
   const [user, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const { setToken } = useToken() 
   const { navigate } = useNavigate()
 
   const [errorMessage, setErrorMessage] = useState('')
@@ -29,33 +27,35 @@ const Login = () => {
 
   const handleLogin = async () => {
     const hashedPassword = md5(password)
-    const response = await fetch('http://127.0.0.1:3001/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: user, password: hashedPassword })
-    });
-    const { access_token } = await response.json()
-    console.log('response: ', response)
+    try {
+      const response = await fetch('http://127.0.0.1:3001/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user: user, password: hashedPassword })
+      });
 
-    if (response.ok) {
-      console.log('success! token is: ', access_token)
-      setToken(access_token)
-      navigate('/admin')
-      return
-    } else {
-      setErrorMessage('Incorrect user or password')
+      if (response.ok) {
+        console.log('Success!');
+        navigate('/admin');
+      } else {
+        console.error('Login failed:', response.status, response.statusText);
+        setErrorMessage('Incorrect user or password');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setErrorMessage('Failed to connect to the server');
     }
   }
-
+  
   return (
     <aside className="login">
       <h1 className="title">Welcome!</h1>
       {
-        errorMessage !== '' ? (
+        errorMessage !== '' && (
           <div className='error-message' onClick={() => setErrorMessage('')}>
             {errorMessage}
           </div>
-        ) : null
+        )
       }
       <Input label="Username" type="text" value={user} onChange={(value) => setValue('username', value)} />
       <Input label="Password" type="password" value={password} onChange={(value) => setValue('password', value)}/>

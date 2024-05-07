@@ -40,7 +40,7 @@ const ModalForm = ({ isOpen, onClose, onSubmit, post, isUpdate }) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     onSubmit(formData)
-    onClose() // Close the modal on submit
+    onClose() 
   }
 
   if (!isOpen) return null

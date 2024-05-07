@@ -23,7 +23,7 @@ const TokenProvider = ({ children }) => {
     if (token) {
         localStorage.setItem('access_token', token)
     } else {
-        localStorage.removeItem('access_token'); // Asegúrate de remover el token si no está presente
+        localStorage.removeItem('access_token');
     }
   }, [token])
 
@@ -50,4 +50,4 @@ TokenProvider.propTypes = {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export default useToken
-export { TokenContext, TokenProvider }
+export { TokenContext, TokenProvider,}
