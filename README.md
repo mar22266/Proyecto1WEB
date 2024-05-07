@@ -5,6 +5,7 @@ This repository contains the code for a soccer blog, a dynamic web application f
 ### server
 
 https://andremarroquinta.netlify.app/
+
 http://ghostdomain.xyz/
 ## Getting Started
 
