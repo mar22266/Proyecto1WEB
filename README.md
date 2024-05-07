@@ -35,6 +35,7 @@ To run the soccer blog in development mode, use:
 
 ### Copy code
 - npm run dev
+  
 This will start the Node.js server on port 3001, and you should be able to access the app on http://localhost:3001.
 
 ### Using Docker Compose
@@ -42,7 +43,8 @@ To run the application with all its services (app and database) using Docker Com
 
 ### Copy code
 - docker-compose up --build
+  
 This command builds the Docker image for the application and starts the services defined in your docker-compose.yml file:
 
-MySQL Database: Runs on port 3301 and initializes with the provided schema.
+### MySQL Database: Runs on port 3301 and initializes with the provided schema.
 Node.js Application: Serves the soccer blog on port 3001.
