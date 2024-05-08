@@ -7,10 +7,10 @@ import EmptyState from '@components/EmptyState'
 const Blog = () => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  /*hhtps*/
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch('http://34.203.120.96:3001/posts/')
+      const response = await fetch('https://ghostdomain.xyz:3001/posts')
       const data = await response.json()
       setPosts(data)
       setIsLoading(false)

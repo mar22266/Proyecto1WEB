@@ -25,7 +25,7 @@ const Admin = () => {
   const [posts, setPosts] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isUpdate, setIsUpdate] = useState(false)
-
+  /*hhtps*/
   useEffect(() => {
     fetchData('https://ghostdomain.xyz:3001/posts').then(response => {
       if (response.data && Array.isArray(response.data)) {
