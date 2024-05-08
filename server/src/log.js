@@ -21,7 +21,7 @@ const HourNow = () => {
   return formattedDate
 }
 
-const logStream = fs.createWriteStream(join(dirname1, '../blog_sergio.txt'), { flags: 'a' })
+const logStream = fs.createWriteStream(join(dirname1, '../blog_andre.txt'), { flags: 'a' })
 
 const logError = (message) => {
   const now = HourNow()
