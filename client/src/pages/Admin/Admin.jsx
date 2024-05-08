@@ -74,7 +74,7 @@ const Admin = () => {
 
   const savePost = () => {
     const method = values.id ? 'PUT' : 'POST'
-    const url = values.id ? `http://127.0.0.1:3001/posts/${values.id}` : 'http://127.0.0.1:3001/posts'
+    const url = values.id ? `http://ec2-34-226-197-0.compute-1.amazonaws.com:3001/posts/${values.id}` : 'http://ec2-34-226-197-0.compute-1.amazonaws.com:3001/posts'
     fetchData(url, {
       method: method,
       headers: { 'Content-Type': 'application/json' },
