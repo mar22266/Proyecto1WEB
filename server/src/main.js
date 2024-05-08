@@ -18,7 +18,7 @@ import {
 const app = express()
 app.use(cors())
 const port = 3001; 
-const address = '127.0.0.1'
+const address = 'https://ghostdomain.xyz/'
 
 app.use(express.json())
 
