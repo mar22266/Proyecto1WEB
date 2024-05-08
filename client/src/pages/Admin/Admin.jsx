@@ -27,7 +27,7 @@ const Admin = () => {
   const [isUpdate, setIsUpdate] = useState(false)
 
   useEffect(() => {
-    fetchData('http://127.0.0.1:3001/posts').then(response => {
+    fetchData('https://ghostdomain.xyz:3001/posts').then(response => {
       if (response.data && Array.isArray(response.data)) {
         setPosts(response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
       } else {
@@ -38,7 +38,7 @@ const Admin = () => {
   }, [fetchData])
 
   const handleDelete = postId => {
-    fetchData(`http://127.0.0.1:3001/posts/${postId}`, { method: 'DELETE' })
+    fetchData(`https://ghostdomain.xyz:3001/posts/${postId}`, { method: 'DELETE' })
       .then(() => setPosts(posts.filter(post => post.id !== postId)))
       .catch(err => console.error("Error deleting post:", err)) 
   }
