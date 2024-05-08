@@ -35,7 +35,6 @@
   user-select: none;
   color: rgb(206, 255, 122);
   font-weight: bold;
-  cursor: url("src/assets/images/mini.png"), auto;
 }
 
 .eye.closed {
