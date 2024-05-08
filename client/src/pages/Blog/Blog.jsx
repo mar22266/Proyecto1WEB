@@ -10,7 +10,7 @@ const Blog = () => {
   /*hhtps*/
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch('https://ghostdomain.xyz')
+      const response = await fetch('https://ghostdomain.xyz:3001/posts')
       const data = await response.json()
       setPosts(data)
       setIsLoading(false)
