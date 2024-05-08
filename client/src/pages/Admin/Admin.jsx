@@ -36,7 +36,7 @@ const Admin = () => {
       }
     });
   }, [fetchData])
-
+  /*hhtps*/
   const handleDelete = postId => {
     fetchData(`https://ghostdomain.xyz:3001/posts/${postId}`, { method: 'DELETE' })
       .then(() => setPosts(posts.filter(post => post.id !== postId)))

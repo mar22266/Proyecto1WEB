@@ -46,7 +46,7 @@ const Login = () => {
       setErrorMessage('Failed to connect to the server');
     }
   }
-  
+    /*login*/
   return (
     <aside className="login">
       <h1 className="title">Welcome!</h1>

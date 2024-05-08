@@ -21,7 +21,7 @@ const Blog = () => {
 
   if (isLoading) return <Loading />
   if (!posts.length) return <EmptyState />
-
+  /*loading?*/
   return (
     <div className="blog">
       <Suspense fallback={<Loading />}>
