@@ -28,7 +28,7 @@ const Login = () => {
   const handleLogin = async () => {
     const hashedPassword = md5(password)
     try {
-      const response = await fetch('http://ec2-34-226-197-0.compute-1.amazonaws.com:3001/login', {
+      const response = await fetch('https://ghostdomain.xyz:3001/posts/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user: user, password: hashedPassword })
