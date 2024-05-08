@@ -10,7 +10,7 @@ const Blog = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch('https://ghostdomain.xyz:3001/posts/')
+      const response = await fetch('http://ec2-34-203-120-96.compute-1.amazonaws.com/posts/')
       const data = await response.json()
       setPosts(data)
       setIsLoading(false)
