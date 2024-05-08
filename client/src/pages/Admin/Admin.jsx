@@ -74,7 +74,7 @@ const Admin = () => {
 
   const savePost = () => {
     const method = values.id ? 'PUT' : 'POST'
-    const url = values.id ? `https://ghostdomain.xyz:3001/posts/${values.id}` : 'https://ghostdomain.xyz:3001/posts/'
+    const url = values.id ? `http://34.203.120.96:3001/posts/${values.id}` : 'http://34.203.120.96:3001/posts/'
     fetchData(url, {
       method: method,
       headers: { 'Content-Type': 'application/json' },

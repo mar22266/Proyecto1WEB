@@ -28,7 +28,7 @@ const Login = () => {
   const handleLogin = async () => {
     const hashedPassword = md5(password)
     try {
-      const response = await fetch('https://ghostdomain.xyz:3001/posts/', {
+      const response = await fetch('http://34.203.120.96:3001/posts/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user: user, password: hashedPassword })
