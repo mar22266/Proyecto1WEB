@@ -4,9 +4,10 @@ This repository contains the code for a soccer blog, a dynamic web application f
 
 ### server
 
-https://andremarroquinta.netlify.app/
-
 http://ghostdomain.xyz/
+
+Ingresar como admin con usuario: andre password 123
+
 ## Getting Started
 
 These instructions will help you to set up your own copy of the soccer blog on your local machine for development and testing purposes.
