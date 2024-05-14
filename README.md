@@ -6,7 +6,7 @@ This repository contains the code for a soccer blog, a dynamic web application f
 
 http://ghostdomain.xyz/
 
-Ingresar como admin con usuario: andre password 123
+Ingresar como admin con usuario: andre password: 123
 
 ## Getting Started
 
