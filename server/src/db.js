@@ -75,12 +75,26 @@ export async function deletePost(postId) {
 
 export async function login(user, password) {
   try {
-    const result = await pool.query('SELECT id FROM users WHERE user = $1 AND password = $2', [user, password]);
-    console.log('Login query result:', result.rows); // Add logging
+    console.log('Login function called with:', { user, password }); // Log input parameters
+    const result = await pool.query('SELECT id, user, password FROM users WHERE user = $1', [user]);
+    console.log('Login query result:', result.rows); // Log query result
+
     if (result.rows.length === 1) {
-      return result.rows[0];
+      const userRecord = result.rows[0];
+      console.log('User record found:', userRecord); // Log user record
+
+      // Check password
+      if (userRecord.password === password) {
+        console.log('Password match');
+        return { id: userRecord.id, username: userRecord.user };
+      } else {
+        console.log('Password does not match');
+        return false;
+      }
+    } else {
+      console.log('User not found');
+      return false;
     }
-    return false;
   } catch (error) {
     console.error('Error during login:', error);
     throw error;
