@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: my-app
+    env: node
+    plan: free
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    envVars:
+      - key: DATABASE_URL
+        value: "postgres://soccer_blog_db_puui_user:6JTONXbfh0OagskfWtnygxyJUh9NUYOf@dpg-cp2cid6n7f5s73ffaj30-a.oregon-postgres.render.com/soccer_blog_db_puui"
