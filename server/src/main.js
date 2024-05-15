@@ -32,7 +32,7 @@ const pool = new Pool({
 const app = express();
 app.use(cors());
 
-const port = process.env.PORT || 3001; // Use the PORT environment variable provided by Render
+const port = process.env.PORT || 3001;
 
 app.use(express.json());
 
@@ -58,6 +58,7 @@ app.get('/posts', async (req, res) => {
     res.json(posts);
   } catch (error) {
     logError(error);
+    console.error(error); // Add this line for detailed logging
     res.status(500).json({ message: error.message });
   }
 });
@@ -74,13 +75,7 @@ app.post('/posts', async (req, res) => {
     imageUrl,
   } = req.body;
 
-  if (!title
-    || !content
-    || !homeTeam
-    || !awayTeam
-    || homeScore === undefined
-    || awayScore === undefined
-    || !imageUrl) {
+  if (!title || !content || !homeTeam || !awayTeam || homeScore === undefined || awayScore === undefined || !imageUrl) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
@@ -90,6 +85,7 @@ app.post('/posts', async (req, res) => {
     response('POST', '/posts', result);
     return res.status(201).json(result);
   } catch (error) {
+    console.error(error); // Add this line for detailed logging
     return res.status(500).json({ message: error.message });
   }
 });
@@ -107,6 +103,7 @@ app.get('/posts/:postId', async (req, res) => {
       res.status(404).json({ message: 'Post not found' });
     }
   } catch (error) {
+    console.error(error); // Add this line for detailed logging
     res.status(500).json({ message: error.message });
   }
 });
@@ -124,13 +121,7 @@ app.put('/posts/:postId', async (req, res) => {
     imageUrl,
   } = req.body;
 
-  if (!title
-    || !content
-    || !homeTeam
-    || !awayTeam
-    || homeScore === undefined
-    || awayScore === undefined
-    || !imageUrl) {
+  if (!title || !content || !homeTeam || !awayTeam || homeScore === undefined || awayScore === undefined || !imageUrl) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
@@ -145,6 +136,7 @@ app.put('/posts/:postId', async (req, res) => {
     response('PUT', '/posts/:postId', result);
     return res.json(result);
   } catch (error) {
+    console.error(error); // Add this line for detailed logging
     return res.status(500).json({ message: error.message });
   }
 });
@@ -158,6 +150,7 @@ app.delete('/posts/:postId', async (req, res) => {
     response('DELETE', '/posts/:postId', result);
     res.json(result);
   } catch (error) {
+    console.error(error); // Add this line for detailed logging
     res.status(500).json({ message: error.message });
   }
 });
@@ -179,6 +172,7 @@ app.post('/login', async (req, res) => {
     }
     return res.status(401).json({ message: 'Invalid user or password' });
   } catch (error) {
+    console.error(error); // Add this line for detailed logging
     return res.status(500).json({ message: error.message });
   }
 });
@@ -197,6 +191,7 @@ app.post('/register', async (req, res) => {
     response('POST', '/register', result);
     return res.status(201).json(result);
   } catch (error) {
+    console.error(error); // Add this line for detailed logging
     return res.status(500).json({ message: error.message });
   }
 });

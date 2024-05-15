@@ -1,10 +1,17 @@
 import pool from './conn.js'
 
 
-export async function getAllPosts() {
-  const [rows] = await pool.query('SELECT * FROM blog_posts')
-  return rows
-}
+// db.js
+export const getAllPosts = async (pool) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM blog_posts');
+    return rows;
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    throw error;
+  }
+};
+
 
 
 export async function createPost(
