@@ -4,7 +4,7 @@ This repository contains the code for a soccer blog, a dynamic web application f
 
 ### server
 
-http://ghostdomain.xyz/
+https://socceramd.netlify.app/
 
 Ingresar como admin con usuario: andre password: 123
 
