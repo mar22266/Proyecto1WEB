@@ -160,6 +160,7 @@ app.post('/login', async (req, res) => {
   const { user, password } = req.body;
 
   if (!user || !password) {
+    console.error('Missing required fields'); // Add this line
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
@@ -168,14 +169,16 @@ app.post('/login', async (req, res) => {
     const result = await login(pool, user, password);
     if (result) {
       response('POST', '/login', result);
-      return res.status(201).json(result);
+      return res.status(200).json(result);
     }
+    console.error('Invalid user or password'); // Add this line
     return res.status(401).json({ message: 'Invalid user or password' });
   } catch (error) {
-    console.error(error); // Add this line for detailed logging
+    console.error('Login error:', error); // Add this line
     return res.status(500).json({ message: error.message });
   }
 });
+
 
 app.post('/register', async (req, res) => {
   console.log('POST /register');
