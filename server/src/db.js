@@ -1,6 +1,6 @@
 import pool from './conn.js';
 
-export const getAllPosts = async () => {
+export const getAllPosts = async (pool) => {
   try {
     const { rows } = await pool.query('SELECT * FROM blog_posts');
     return rows;
@@ -10,15 +10,7 @@ export const getAllPosts = async () => {
   }
 };
 
-export async function createPost(
-  title,
-  content,
-  homeTeam,
-  awayTeam,
-  homeScore,
-  awayScore,
-  imageUrl
-) {
+export async function createPost(pool, title, content, homeTeam, awayTeam, homeScore, awayScore, imageUrl) {
   try {
     const result = await pool.query(
       'INSERT INTO blog_posts (title, content, home_team, away_team, home_score, away_score, image_url) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
@@ -31,7 +23,7 @@ export async function createPost(
   }
 }
 
-export async function getPostById(postId) {
+export async function getPostById(pool, postId) {
   try {
     const result = await pool.query('SELECT * FROM blog_posts WHERE id = $1', [postId]);
     return result.rows[0];
@@ -41,16 +33,7 @@ export async function getPostById(postId) {
   }
 }
 
-export async function updatePost(
-  postId,
-  title,
-  content,
-  homeTeam,
-  awayTeam,
-  homeScore,
-  awayScore,
-  imageUrl
-) {
+export async function updatePost(pool, postId, title, content, homeTeam, awayTeam, homeScore, awayScore, imageUrl) {
   try {
     const result = await pool.query(
       'UPDATE blog_posts SET title = $1, content = $2, home_team = $3, away_team = $4, home_score = $5, away_score = $6, image_url = $7 WHERE id = $8 RETURNING *',
@@ -63,7 +46,7 @@ export async function updatePost(
   }
 }
 
-export async function deletePost(postId) {
+export async function deletePost(pool, postId) {
   try {
     const result = await pool.query('DELETE FROM blog_posts WHERE id = $1 RETURNING *', [postId]);
     return result.rows[0];
@@ -73,7 +56,7 @@ export async function deletePost(postId) {
   }
 }
 
-export async function login(user, password) {
+export async function login(pool, user, password) {
   try {
     console.log('Login function called with:', { user, password });
     const result = await pool.query('SELECT id, user, password FROM users WHERE user = $1', [user]);
@@ -100,7 +83,7 @@ export async function login(user, password) {
   }
 }
 
-export async function register(user, password) {
+export async function register(pool, user, password) {
   try {
     const result = await pool.query('INSERT INTO users (user, password) VALUES ($1, $2) RETURNING *', [user, password]);
     return result.rows[0];
