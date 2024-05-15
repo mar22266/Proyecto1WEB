@@ -1,14 +1,10 @@
-import mysql from 'mysql2/promise';
+import { Pool } from 'pg';
 
-const pool = mysql.createPool({
-  host: 'db', // Use the Docker service name for the MySQL container
-  user: 'andre',
-  database: 'soccer_blog_db',
-  password: 'and',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-  port: 3306  
+const pool = new Pool({
+  connectionString: 'postgres://soccer_blog_db_puui_user:6JTONXbfh0OagskfWtnygxyJUh9NUYOf@dpg-cp2cid6n7f5s73ffaj30-a.oregon-postgres.render.com/soccer_blog_db_puui',
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 export default pool;
