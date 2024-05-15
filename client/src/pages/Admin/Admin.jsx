@@ -27,7 +27,7 @@ const Admin = () => {
   const [isUpdate, setIsUpdate] = useState(false)
   /*hhtps*/
   useEffect(() => {
-    fetchData('https://ghostdomain.xyz:3001/posts').then(response => {
+    fetchData('https://soccerdb.onrender.com/posts/').then(response => {
       if (response.data && Array.isArray(response.data)) {
         setPosts(response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
       } else {
@@ -38,7 +38,7 @@ const Admin = () => {
   }, [fetchData])
   /*hhtps*/
   const handleDelete = postId => {
-    fetchData(`https://ghostdomain.xyz:3001/posts/${postId}`, { method: 'DELETE' })
+    fetchData(`https://soccerdb.onrender.com/posts/${postId}`, { method: 'DELETE' })
       .then(() => setPosts(posts.filter(post => post.id !== postId)))
       .catch(err => console.error("Error deleting post:", err)) 
   }
@@ -74,7 +74,7 @@ const Admin = () => {
 
   const savePost = () => {
     const method = values.id ? 'PUT' : 'POST'
-    const url = values.id ? `https://ghostdomain.xyz:3001/posts${values.id}` : 'https://ghostdomain.xyz:3001/posts'
+    const url = values.id ? `https://soccerdb.onrender.com/posts/${values.id}` : 'https://soccerdb.onrender.com/posts/'
     fetchData(url, {
       method: method,
       headers: { 'Content-Type': 'application/json' },
