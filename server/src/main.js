@@ -11,16 +11,9 @@ import {
   login,
   register,
 } from './db.js';
-import {
-  logError,
-  request,
-  response,
-} from './log.js';
 
-// Load environment variables from .env file
 dotenv.config();
 
-// Create a new Pool instance using pg
 const { Pool } = pg;
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -31,10 +24,9 @@ const pool = new Pool({
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 const port = process.env.PORT || 3001;
-
-app.use(express.json());
 
 app.get('/health', (req, res) => {
   res.status(200).send('OK');
@@ -50,21 +42,16 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/posts', async (req, res) => {
-  console.log('GET /posts');
-  request('GET', '/posts', '');
   try {
     const posts = await getAllPosts(pool);
-    response('GET', '/posts', posts);
     res.json(posts);
   } catch (error) {
-    logError(error);
-    console.error(error); // Add this line for detailed logging
+    console.error('Error fetching posts:', error);
     res.status(500).json({ message: error.message });
   }
 });
 
 app.post('/posts', async (req, res) => {
-  console.log('POST /posts');
   const {
     title,
     content,
@@ -79,37 +66,31 @@ app.post('/posts', async (req, res) => {
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
-  request('POST', '/posts', req.body);
   try {
     const result = await createPost(pool, title, content, homeTeam, awayTeam, homeScore, awayScore, imageUrl);
-    response('POST', '/posts', result);
-    return res.status(201).json(result);
+    res.status(201).json(result);
   } catch (error) {
-    console.error(error); // Add this line for detailed logging
-    return res.status(500).json({ message: error.message });
+    console.error('Error creating post:', error);
+    res.status(500).json({ message: error.message });
   }
 });
 
 app.get('/posts/:postId', async (req, res) => {
-  console.log('GET /posts/:postId');
-  request('GET', '/posts/:postId', '');
+  const { postId } = req.params;
   try {
-    const { postId } = req.params;
     const post = await getPostById(pool, postId);
     if (post) {
-      response('GET', '/posts/:postId', post);
       res.json(post);
     } else {
       res.status(404).json({ message: 'Post not found' });
     }
   } catch (error) {
-    console.error(error); // Add this line for detailed logging
+    console.error('Error fetching post:', error);
     res.status(500).json({ message: error.message });
   }
 });
 
 app.put('/posts/:postId', async (req, res) => {
-  console.log('PUT /posts/:postId');
   const { postId } = req.params;
   const {
     title,
@@ -125,81 +106,65 @@ app.put('/posts/:postId', async (req, res) => {
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
-  request('PUT', '/posts/:postId', req.body);
   try {
     const result = await updatePost(pool, postId, title, content, homeTeam, awayTeam, homeScore, awayScore, imageUrl);
-
     if (result.rowCount === 0) {
       return res.status(404).json({ message: 'Post not found' });
     }
-
-    response('PUT', '/posts/:postId', result);
-    return res.json(result);
+    res.json(result);
   } catch (error) {
-    console.error(error); // Add this line for detailed logging
-    return res.status(500).json({ message: error.message });
+    console.error('Error updating post:', error);
+    res.status(500).json({ message: error.message });
   }
 });
 
 app.delete('/posts/:postId', async (req, res) => {
-  console.log('DELETE /posts/:postId');
-  request('DELETE', '/posts/:postId', '');
+  const { postId } = req.params;
   try {
-    const { postId } = req.params;
     const result = await deletePost(pool, postId);
-    response('DELETE', '/posts/:postId', result);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
     res.json(result);
   } catch (error) {
-    console.error(error); // Add this line for detailed logging
+    console.error('Error deleting post:', error);
     res.status(500).json({ message: error.message });
   }
 });
 
 app.post('/login', async (req, res) => {
-  console.log('POST /login');
   const { user, password } = req.body;
 
-  console.log('Request body:', req.body); // Add logging
-
   if (!user || !password) {
-    console.error('Missing required fields');
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
-  request('POST', '/login', req.body);
   try {
-    const result = await login(user, password); // Corrected this line
+    const result = await login(pool, user, password);
     if (result) {
-      response('POST', '/login', result);
-      console.log('Login successful:', result);
-      return res.status(200).json(result);
+      res.status(200).json(result);
+    } else {
+      res.status(401).json({ message: 'Invalid user or password' });
     }
-    console.error('Invalid user or password');
-    return res.status(401).json({ message: 'Invalid user or password' });
   } catch (error) {
-    console.error('Login error:', error);
-    return res.status(500).json({ message: error.message });
+    console.error('Error during login:', error);
+    res.status(500).json({ message: error.message });
   }
 });
 
-
-
 app.post('/register', async (req, res) => {
-  console.log('POST /register');
   const { username, password } = req.body;
+
   if (!username || !password) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
-  request('POST', '/register', req.body);
-
   try {
     const result = await register(pool, username, password);
-    response('POST', '/register', result);
-    return res.status(201).json(result);
+    res.status(201).json(result);
   } catch (error) {
-    console.error(error); // Add this line for detailed logging
-    return res.status(500).json({ message: error.message });
+    console.error('Error registering user:', error);
+    res.status(500).json({ message: error.message });
   }
 });
 

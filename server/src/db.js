@@ -1,6 +1,6 @@
 import pool from './conn.js';
 
-export const getAllPosts = async (pool) => {
+export const getAllPosts = async () => {
   try {
     const { rows } = await pool.query('SELECT * FROM blog_posts');
     return rows;
@@ -75,15 +75,14 @@ export async function deletePost(postId) {
 
 export async function login(user, password) {
   try {
-    console.log('Login function called with:', { user, password }); // Log input parameters
+    console.log('Login function called with:', { user, password });
     const result = await pool.query('SELECT id, user, password FROM users WHERE user = $1', [user]);
-    console.log('Login query result:', result.rows); // Log query result
+    console.log('Login query result:', result.rows);
 
     if (result.rows.length === 1) {
       const userRecord = result.rows[0];
-      console.log('User record found:', userRecord); // Log user record
+      console.log('User record found:', userRecord);
 
-      // Check password
       if (userRecord.password === password) {
         console.log('Password match');
         return { id: userRecord.id, username: userRecord.user };
