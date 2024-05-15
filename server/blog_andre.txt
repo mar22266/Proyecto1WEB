@@ -1,0 +1,2 @@
+[REQUEST] 05/15/2024, 09:06:07 - GET /posts - Payload: ""
+[ERROR] 05/15/2024, 09:06:07 - AggregateError
