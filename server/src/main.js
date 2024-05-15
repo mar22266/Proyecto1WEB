@@ -1,5 +1,7 @@
-import express from 'express'
-import cors from 'cors'
+import express from 'express';
+import cors from 'cors';
+import pg from 'pg';
+import dotenv from 'dotenv';
 import {
   getAllPosts,
   createPost,
@@ -8,37 +10,60 @@ import {
   deletePost,
   login,
   register,
-} from './db.js'
+} from './db.js';
 import {
   logError,
   request,
   response,
-} from './log.js'
+} from './log.js';
 
-const app = express()
-app.use(cors())
-const port = 3001; 
-const address = '127.0.0.1'
+// Load environment variables from .env file
+dotenv.config();
 
-app.use(express.json())
+// Create a new Pool instance using pg
+const { Pool } = pg;
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+const app = express();
+app.use(cors());
+
+const port = process.env.PORT || 3001; // Use the PORT environment variable provided by Render
+
+app.use(express.json());
+
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
+app.get('/', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    res.send(`Server is running. Database connected at: ${result.rows[0].now}`);
+  } catch (error) {
+    res.status(500).send(`Server is running, but database connection failed: ${error.message}`);
+  }
+});
 
 app.get('/posts', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('GET /posts')
-  request('GET', '/posts', '')
+  console.log('GET /posts');
+  request('GET', '/posts', '');
   try {
-    const posts = await getAllPosts()
-    response('GET', '/posts', posts)
-    res.json(posts)
+    const posts = await getAllPosts(pool);
+    response('GET', '/posts', posts);
+    res.json(posts);
   } catch (error) {
-    logError(error)
-    res.status(500).json({ message: error.message })
+    logError(error);
+    res.status(500).json({ message: error.message });
   }
-})
+});
 
 app.post('/posts', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('POST /posts')
+  console.log('POST /posts');
   const {
     title,
     content,
@@ -47,9 +72,8 @@ app.post('/posts', async (req, res) => {
     homeScore,
     awayScore,
     imageUrl,
-  } = req.body
+  } = req.body;
 
-  
   if (!title
     || !content
     || !homeTeam
@@ -57,49 +81,39 @@ app.post('/posts', async (req, res) => {
     || homeScore === undefined
     || awayScore === undefined
     || !imageUrl) {
-    return res.status(400).json({ message: 'Missing required fields' })
+    return res.status(400).json({ message: 'Missing required fields' });
   }
 
-  request('POST', '/posts', req.body)
+  request('POST', '/posts', req.body);
   try {
-    const result = await createPost(
-      title,
-      content,
-      homeTeam,
-      awayTeam,
-      homeScore,
-      awayScore,
-      imageUrl,
-    )
-    response('POST', '/posts', result)
-    return res.status(201).json(result)
+    const result = await createPost(pool, title, content, homeTeam, awayTeam, homeScore, awayScore, imageUrl);
+    response('POST', '/posts', result);
+    return res.status(201).json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message })
+    return res.status(500).json({ message: error.message });
   }
-})
+});
 
 app.get('/posts/:postId', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('GET /posts/:postId')
-  request('GET', '/posts/:postId', '')
+  console.log('GET /posts/:postId');
+  request('GET', '/posts/:postId', '');
   try {
-    const { postId } = req.params
-    const post = await getPostById(postId)
+    const { postId } = req.params;
+    const post = await getPostById(pool, postId);
     if (post) {
-      response('GET', '/posts/:postId', post)
-      res.json(post)
+      response('GET', '/posts/:postId', post);
+      res.json(post);
     } else {
-      res.status(404).json({ message: 'Post not found' })
+      res.status(404).json({ message: 'Post not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
-})
+});
 
 app.put('/posts/:postId', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('PUT /posts/:postId')
-  const { postId } = req.params
+  console.log('PUT /posts/:postId');
+  const { postId } = req.params;
   const {
     title,
     content,
@@ -108,7 +122,7 @@ app.put('/posts/:postId', async (req, res) => {
     homeScore,
     awayScore,
     imageUrl,
-  } = req.body
+  } = req.body;
 
   if (!title
     || !content
@@ -117,98 +131,84 @@ app.put('/posts/:postId', async (req, res) => {
     || homeScore === undefined
     || awayScore === undefined
     || !imageUrl) {
-    return res.status(400).json({ message: 'Missing required fields' })
+    return res.status(400).json({ message: 'Missing required fields' });
   }
 
-  request('PUT', '/posts/:postId', req.body)
+  request('PUT', '/posts/:postId', req.body);
   try {
-    const result = await updatePost(
-      postId,
-      title,
-      content,
-      homeTeam,
-      awayTeam,
-      homeScore,
-      awayScore,
-      imageUrl,
-    )
+    const result = await updatePost(pool, postId, title, content, homeTeam, awayTeam, homeScore, awayScore, imageUrl);
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Post not found' })
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Post not found' });
     }
 
-    response('PUT', '/posts/:postId', result)
-    return res.json(result)
+    response('PUT', '/posts/:postId', result);
+    return res.json(result);
   } catch (error) {
-    return res.status(500).json({ message: error.message })
+    return res.status(500).json({ message: error.message });
   }
-})
+});
 
 app.delete('/posts/:postId', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('DELETE /posts/:postId')
-  request('DELETE', '/posts/:postId', '')
+  console.log('DELETE /posts/:postId');
+  request('DELETE', '/posts/:postId', '');
   try {
-    const { postId } = req.params
-    const result = await deletePost(postId)
-    response('DELETE', '/posts/:postId', result)
-    res.json(result)
+    const { postId } = req.params;
+    const result = await deletePost(pool, postId);
+    response('DELETE', '/posts/:postId', result);
+    res.json(result);
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
-})
+});
 
 app.post('/login', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('POST /login')
-  const { user, password } = req.body
+  console.log('POST /login');
+  const { user, password } = req.body;
 
   if (!user || !password) {
-    return res.status(400).json({ message: 'Missing required fields' })
+    return res.status(400).json({ message: 'Missing required fields' });
   }
 
-  request('POST', '/login', req.body)
+  request('POST', '/login', req.body);
   try {
-    const result = await login(user, password)
+    const result = await login(pool, user, password);
     if (result) {
-      response('POST', '/login', result)
-      return res.status(201).json(result)
+      response('POST', '/login', result);
+      return res.status(201).json(result);
     }
-    return res.status(401).json({ message: 'Invalid user or password' })
+    return res.status(401).json({ message: 'Invalid user or password' });
   } catch (error) {
-    return res.status(500).json({ message: error.message })
+    return res.status(500).json({ message: error.message });
   }
-})
+});
 
 app.post('/register', async (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('POST /register')
-  const { username, password } = req.body
+  console.log('POST /register');
+  const { username, password } = req.body;
   if (!username || !password) {
-    return res.status(400).json({ message: 'Missing required fields' })
+    return res.status(400).json({ message: 'Missing required fields' });
   }
 
-  request('POST', '/register', req.body)
+  request('POST', '/register', req.body);
 
   try {
-    const result = await register(username, password)
-    // eslint-disable-next-line no-console
-    response('POST', '/register', result)
-    return res.status(201).json(result)
+    const result = await register(pool, username, password);
+    response('POST', '/register', result);
+    return res.status(201).json(result);
   } catch (error) {
-    // eslint-disable-next-line no-console
-    return res.status(500).json({ message: error.message })
+    return res.status(500).json({ message: error.message });
   }
-})
+});
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Endpoint not found' })
-})
+  res.status(404).json({ message: 'Endpoint not found' });
+});
 
 app.use((req, res) => {
-  res.status(501).json({ message: 'Method not implemented' })
-})
+  res.status(501).json({ message: 'Method not implemented' });
+});
 
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
