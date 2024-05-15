@@ -1,37 +1,36 @@
 import { useState } from 'react';
-import useNavigate from '@hooks/useNavigate'
-import md5 from 'js-md5'
+import useNavigate from '@hooks/useNavigate';
+import Input from '@components/Input';
+import Button from '@components/Button';
 
-import Input from '@components/Input'
-import Button from '@components/Button'
-
-import './Login.css'
+import './Login.css';
 
 const Login = () => {
-  const [user, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const { navigate } = useNavigate()
+  const [user, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const { navigate } = useNavigate();
 
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('');
 
   const setValue = (name, value) => {
-    switch(name) {
+    switch (name) {
       case 'username':
-        setUsername(value)
-        break
+        setUsername(value);
+        break;
       case 'password':
-        setPassword(value)
-        break
+        setPassword(value);
+        break;
+      default:
+        break;
     }
-  }
-  /*hhtps*/
+  };
+
   const handleLogin = async () => {
-    const hashedPassword = md5(password)
     try {
-      const response = await fetch('https://soccerdb.onrender.com/posts/', {
+      const response = await fetch('https://soccerdb.onrender.com/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user: user, password: hashedPassword })
+        body: JSON.stringify({ user, password })
       });
 
       if (response.ok) {
@@ -45,23 +44,21 @@ const Login = () => {
       console.error('Error:', error);
       setErrorMessage('Failed to connect to the server');
     }
-  }
-    /*login*/
+  };
+
   return (
     <aside className="login">
       <h1 className="title">Welcome!</h1>
-      {
-        errorMessage !== '' && (
-          <div className='error-message' onClick={() => setErrorMessage('')}>
-            {errorMessage}
-          </div>
-        )
-      }
+      {errorMessage !== '' && (
+        <div className='error-message' onClick={() => setErrorMessage('')}>
+          {errorMessage}
+        </div>
+      )}
       <Input label="Username" type="text" value={user} onChange={(value) => setValue('username', value)} />
-      <Input label="Password" type="password" value={password} onChange={(value) => setValue('password', value)}/>
+      <Input label="Password" type="password" value={password} onChange={(value) => setValue('password', value)} />
       <Button text="Login" onClick={handleLogin} />
     </aside>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
