@@ -1,6 +1,5 @@
 import pool from './conn.js';
 
-// db.js
 export const getAllPosts = async (pool) => {
   try {
     const { rows } = await pool.query('SELECT * FROM blog_posts');
@@ -77,8 +76,9 @@ export async function deletePost(postId) {
 export async function login(user, password) {
   try {
     const result = await pool.query('SELECT id FROM users WHERE user = $1 AND password = $2', [user, password]);
+    console.log('Login query result:', result.rows); // Add logging
     if (result.rows.length === 1) {
-      return result.rows[0].id;
+      return result.rows[0];
     }
     return false;
   } catch (error) {

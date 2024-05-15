@@ -159,7 +159,7 @@ app.post('/login', async (req, res) => {
   console.log('POST /login');
   const { user, password } = req.body;
 
-  console.log('Request body:', req.body); // Add this line for logging
+  console.log('Request body:', req.body); // Add logging
 
   if (!user || !password) {
     console.error('Missing required fields');
@@ -168,7 +168,7 @@ app.post('/login', async (req, res) => {
 
   request('POST', '/login', req.body);
   try {
-    const result = await login(pool, user, password);
+    const result = await login(user, password); // Corrected this line
     if (result) {
       response('POST', '/login', result);
       console.log('Login successful:', result);
